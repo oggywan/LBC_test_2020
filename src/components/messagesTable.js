@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { Table } from 'antd';
-
+import { DeleteOutlined } from '@ant-design/icons';
 import 'antd/es/table/style/css.js';
 
 const tableText = (v) => (
@@ -45,7 +45,10 @@ function MessagesTable({ messages, setMessageKeyToDelete }) {
       key: 'delete',
       width: 80,
       render: (_, record) => (
-        <a onClick={() => setMessageKeyToDelete(record.key)}>delete</a>
+        <DeleteOutlined
+          style={{ color: '#eb2f96', paddingLeft: '17px' }}
+          onClick={() => setMessageKeyToDelete(record.key)}
+        />
       ),
     },
   ];
@@ -69,9 +72,10 @@ function MessagesTable({ messages, setMessageKeyToDelete }) {
         position: 'absolute',
         width: '90%',
         left: '5%',
-        top: '30%',
+        top: '35%',
         fontFamily: 'Playfair Display',
         backgroundColor: 'yellow',
+        fontWeight: 'bold',
       }}
     >
       <Table

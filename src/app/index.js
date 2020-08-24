@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import firebase from 'firebase';
-import config from '../config';
 import MessagesTable from '../components/messagesTable';
-
+import NewMessage from '../components/createMessageModal';
+import DeleteMessageModal from '../components/deleteMessageModal';
+import config from '../config';
+import firebase from 'firebase';
 import { Button, Switch } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import NewMessage from '../components/createMessageModal';
 import 'antd/es/switch/style/css.js';
-import DeleteMessageModal from '../components/deleteMessageModal';
 
 function App() {
   // array of messages, copied from the DB
@@ -86,7 +85,7 @@ function App() {
         }}
         onClick={addMessageToDB}
       >
-        A great title
+        My message app
       </p>
       <div
         style={{
@@ -121,7 +120,7 @@ function App() {
             style={{
               position: 'absolute',
               right: '5%',
-              top: '25%',
+              top: '30%',
             }}
             checked={showAll}
             checkedChildren='hide private'
