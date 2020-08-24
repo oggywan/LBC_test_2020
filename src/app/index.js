@@ -3,10 +3,18 @@ import firebase from 'firebase';
 import config from '../config';
 import MessagesTable from '../components/messagesTable';
 
+import { Button } from 'antd';
+import NewMessage from '../components/newMessage';
+
 function App() {
+  // array of messages, copied from the DB
   const [messages, setMessages] = useState([]);
+  // Boolean that toggles the new message modal display
+  const [newMessage, setNewMessage] = useState(false);
+  // reference to the Firebase DB
   const [database, setDatabase] = useState(null);
 
+  // first connect to the Firebase DB
   try {
     firebase.initializeApp(config);
     setDatabase(firebase.database());
@@ -17,58 +25,39 @@ function App() {
     }
   }
 
+  // listen to the DB updates, and update the messages accordingly
   useEffect(() => {
     const rootRef = firebase.database().ref().child('messages');
     rootRef.on('value', (snap) => {
-      console.log('update!!!: ', snap);
-      updateMessages(snap.val());
+      console.log('hello');
+      const dbMessages = snap.val() || {};
+      setMessages(
+        Object.keys(dbMessages).map((key) => ({
+          ...dbMessages[key],
+          key,
+        }))
+      );
     });
   }, []);
 
-  useEffect(() => {
-    console.log('start: ', config);
-    const getUserData = () => {
-      database
-        .ref('messages/')
-        .once('value')
-        .then((snapshot) => {
-          updateMessages(snapshot.val());
-        });
-      console.log('DATA RETRIEVED');
-    };
-    getUserData();
-  }, [setMessages]);
+  // add a message to the DB
+  const addMessage = ({ content, isPrivate }) => {
+    console.log('addMessage: ', content);
+    if (content) {
+      const data = {
+        private: isPrivate,
+        content,
+        timestamp: new Date().getTime(),
+      };
+      database.ref('messages/').push(data);
 
-  const updateMessages = (val) => {
-    console.log('updateMessages: ', val);
-    const msgs = [];
-    if (val) {
-      Object.keys(val).forEach(function (key) {
-        console.log(key, val[key]);
-        msgs.push({ ...val[key], key });
-      });
+      // close the modal
+      setNewMessage(false);
     }
-    setMessages(msgs);
   };
 
-  const addData = () => {
-    console.log('addData: ', database);
-    const data = {
-      title: 'title-test-' + Math.random(),
-      private: Math.random() < 0.5,
-      content:
-        'content-test-content-test-content-test-content-test-content-test',
-      username: 'nonono',
-      timestamp: new Date().getTime(),
-    };
-
-    database.ref('messages/').push(data);
-  };
-
-  const deleteData = (key) => {
-    console.log('deleteData: ', key);
-    database.ref('messages/' + key).remove();
-  };
+  // removes the message from the DB
+  const deleteData = (key) => database.ref('messages/' + key).remove();
 
   return (
     <div>
@@ -82,11 +71,33 @@ function App() {
           fontSize: '3em',
           fontFamily: 'Playfair Display',
         }}
-        onClick={addData}
+        onClick={addMessage}
       >
         A great title
       </p>
+      <div
+        style={{
+          position: 'absolute',
+          width: '20%',
+          left: '40%',
+          top: '20%',
+        }}
+      >
+        <Button
+          type='primary'
+          style={{}}
+          block
+          onClick={() => setNewMessage(true)}
+        >
+          Add a new message
+        </Button>
+      </div>
+
       <MessagesTable messages={messages} deleteData={deleteData} />
+
+      {newMessage && (
+        <NewMessage setNewMessage={setNewMessage} addMessage={addMessage} />
+      )}
     </div>
   );
 }

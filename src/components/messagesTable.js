@@ -13,11 +13,6 @@ const tableText = (v) => (
 function MessagesTable({ messages, deleteData }) {
   const columns = [
     {
-      title: 'title',
-      dataIndex: 'title',
-      key: 'title',
-    },
-    {
       title: 'message',
       dataIndex: 'content',
       key: 'content',
@@ -31,14 +26,10 @@ function MessagesTable({ messages, deleteData }) {
       render: (v) => (v ? tableText('yes') : tableText('no')),
     },
     {
-      title: 'username',
-      dataIndex: 'username',
-      key: 'username',
-    },
-    {
       title: 'date',
       dataIndex: 'timestamp',
       key: 'timestamp',
+      width: 170,
       render: (v) => tableText(new Date(v).toLocaleString()),
     },
     {
@@ -69,7 +60,7 @@ function MessagesTable({ messages, deleteData }) {
         position: 'absolute',
         width: '90%',
         left: '5%',
-        top: '20%',
+        top: '30%',
         fontFamily: 'Playfair Display',
         backgroundColor: 'yellow',
       }}
@@ -79,7 +70,7 @@ function MessagesTable({ messages, deleteData }) {
         dataSource={messages}
         pagination={false}
         fixedHeader={true}
-        scroll={{ y: height * 0.6 }}
+        scroll={{ y: height * 0.5 }}
         bordered
       />
     </div>
