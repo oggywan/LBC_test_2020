@@ -5,14 +5,17 @@ import MessagesTable from '../components/messagesTable';
 
 import { Button, Switch } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import NewMessage from '../components/newMessage';
+import NewMessage from '../components/createMessageModal';
 import 'antd/es/switch/style/css.js';
+import DeleteMessageModal from '../components/deleteMessageModal';
 
 function App() {
   // array of messages, copied from the DB
   const [messages, setMessages] = useState([]);
   // Boolean that toggles the new message modal display
-  const [newMessage, setNewMessage] = useState(false);
+  const [creatingMessage, setIsCreatingMessage] = useState(false);
+  // key of the message to be deleted, if any. Used to display the deletion modal
+  const [messageKeyToDelete, setMessageKeyToDelete] = useState(null);
   // reference to the Firebase DB
   const [database, setDatabase] = useState(null);
   // Boolean: show all messages, including private ones
@@ -47,9 +50,9 @@ function App() {
     });
   }, []);
 
-  // add a message to the DB
-  const addMessage = ({ content, isPrivate }) => {
-    console.log('addMessage: ', content);
+  // add a message to the Firebase DB
+  const addMessageToDB = ({ content, isPrivate }) => {
+    console.log('addMessageToDB: ', content);
     if (content) {
       const data = {
         private: isPrivate,
@@ -59,13 +62,16 @@ function App() {
       database.ref('messages/').push(data);
 
       // close the modal
-      setNewMessage(false);
+      setIsCreatingMessage(false);
     }
   };
 
-  // removes the message from the DB
-  const deleteMessage = (key) => database.ref('messages/' + key).remove();
-
+  // removes the message whose id is messageKeyToDelete, from the DB
+  const deleteMessage = () => {
+    database.ref('messages/' + messageKeyToDelete).remove();
+    setMessageKeyToDelete('');
+  };
+  console.log('messages: ', messages);
   return (
     <div>
       <p
@@ -78,7 +84,7 @@ function App() {
           fontSize: '3em',
           fontFamily: 'Playfair Display',
         }}
-        onClick={addMessage}
+        onClick={addMessageToDB}
       >
         A great title
       </p>
@@ -94,7 +100,7 @@ function App() {
           type='primary'
           style={{}}
           block
-          onClick={() => setNewMessage(true)}
+          onClick={() => setIsCreatingMessage(true)}
         >
           Add a new message
         </Button>
@@ -123,13 +129,27 @@ function App() {
             onChange={() => setShowAll(!showAll)}
           />
           <MessagesTable
-            messages={messages.filter((msg) => !msg.private || showAll)}
-            deleteMessage={deleteMessage}
+            messages={messages
+              .filter((msg) => !msg.private || showAll)
+              .reverse()}
+            setMessageKeyToDelete={setMessageKeyToDelete}
           />
         </>
       )}
-      {newMessage && (
-        <NewMessage setNewMessage={setNewMessage} addMessage={addMessage} />
+      {messageKeyToDelete && (
+        <DeleteMessageModal
+          deleteMessage={deleteMessage}
+          setMessageKeyToDelete={setMessageKeyToDelete}
+          content={
+            messages.find((msg) => msg.key === messageKeyToDelete).content
+          }
+        />
+      )}
+      {creatingMessage && (
+        <NewMessage
+          addMessageToDB={addMessageToDB}
+          setIsCreatingMessage={setIsCreatingMessage}
+        />
       )}
     </div>
   );

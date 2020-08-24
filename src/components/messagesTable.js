@@ -14,7 +14,7 @@ const tableText = (v) => (
   This component is a Table that displays all messages 
   and allows to delete them (content | private | date | delete)
 */
-function MessagesTable({ messages, deleteMessage }) {
+function MessagesTable({ messages, setMessageKeyToDelete }) {
   // height of the display window
   const [windowHeight, setWindowHeight] = useState(120);
 
@@ -45,7 +45,7 @@ function MessagesTable({ messages, deleteMessage }) {
       key: 'delete',
       width: 80,
       render: (_, record) => (
-        <a onClick={() => deleteMessage(record.key)}>delete</a>
+        <a onClick={() => setMessageKeyToDelete(record.key)}>delete</a>
       ),
     },
   ];

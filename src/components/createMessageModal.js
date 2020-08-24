@@ -19,9 +19,9 @@ const layout = {
 };
 
 /*
-  This component is a modal that allows the user to enter their message
+  This component is a modal that allows the user to enter their new message
 */
-function NewMessage({ setNewMessage, addMessage }) {
+function CreateMessageModal({ setIsCreatingMessage, addMessageToDB }) {
   // content of the message
   const [content, setContent] = useState('');
   // Boolean: whether the message is private or no
@@ -31,8 +31,8 @@ function NewMessage({ setNewMessage, addMessage }) {
     <Modal
       title='Write a new message'
       visible={true}
-      onOk={(_) => addMessage({ content, isPrivate })}
-      onCancel={(_) => setNewMessage(false)}
+      onOk={(_) => addMessageToDB({ content, isPrivate })}
+      onCancel={(_) => setIsCreatingMessage(false)}
     >
       <Form {...layout}>
         <Item label='Message' rows={4} rules={[{ required: true }]}>
@@ -49,4 +49,4 @@ function NewMessage({ setNewMessage, addMessage }) {
   );
 }
 
-export default NewMessage;
+export default CreateMessageModal;
