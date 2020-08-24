@@ -4,6 +4,12 @@ import { Table } from 'antd';
 
 import 'antd/es/table/style/css.js';
 
+const tableText = (v) => (
+  <p style={{ whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: 0 }}>
+    {v}
+  </p>
+);
+
 function MessagesTable({ messages, deleteData }) {
   const columns = [
     {
@@ -15,16 +21,14 @@ function MessagesTable({ messages, deleteData }) {
       title: 'message',
       dataIndex: 'content',
       key: 'content',
-      render: (v) => (
-        <p style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>{v}</p>
-      ),
+      render: (v) => tableText(v),
     },
     {
       title: 'private',
       dataIndex: 'private',
       key: 'private',
       width: 80,
-      render: (v) => (v ? <p>yes</p> : <p>no</p>),
+      render: (v) => (v ? tableText('yes') : tableText('no')),
     },
     {
       title: 'username',
@@ -35,22 +39,15 @@ function MessagesTable({ messages, deleteData }) {
       title: 'date',
       dataIndex: 'timestamp',
       key: 'timestamp',
-      render: (v) => <p>{new Date(v).toLocaleString()}</p>,
+      render: (v) => tableText(new Date(v).toLocaleString()),
     },
     {
       title: 'delete',
       dataIndex: 'delete',
       key: 'delete',
-      render: (v, record) => (
-        <a
-          onClick={(e) => {
-            e.persist();
-            console.log('hello: ', record);
-            deleteData(record.key);
-          }}
-        >
-          delete
-        </a>
+      width: 80,
+      render: (_, record) => (
+        <a onClick={() => deleteData(record.key)}>delete</a>
       ),
     },
   ];
@@ -83,6 +80,7 @@ function MessagesTable({ messages, deleteData }) {
         pagination={false}
         fixedHeader={true}
         scroll={{ y: height * 0.6 }}
+        bordered
       />
     </div>
   );

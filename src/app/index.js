@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import firebase from 'firebase';
 import config from '../config';
 import MessagesTable from '../components/messagesTable';
@@ -42,10 +42,12 @@ function App() {
   const updateMessages = (val) => {
     console.log('updateMessages: ', val);
     const msgs = [];
-    Object.keys(val).forEach(function (key) {
-      console.log(key, val[key]);
-      msgs.push({ ...val[key], key });
-    });
+    if (val) {
+      Object.keys(val).forEach(function (key) {
+        console.log(key, val[key]);
+        msgs.push({ ...val[key], key });
+      });
+    }
     setMessages(msgs);
   };
 
@@ -53,7 +55,7 @@ function App() {
     console.log('addData: ', database);
     const data = {
       title: 'title-test-' + Math.random(),
-      private: false,
+      private: Math.random() < 0.5,
       content:
         'content-test-content-test-content-test-content-test-content-test',
       username: 'nonono',
