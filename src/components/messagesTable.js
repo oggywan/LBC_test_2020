@@ -10,7 +10,14 @@ const tableText = (v) => (
   </p>
 );
 
-function MessagesTable({ messages, deleteData }) {
+/*
+  This component is a Table that displays all messages 
+  and allows to delete them (content | private | date | delete)
+*/
+function MessagesTable({ messages, deleteMessage }) {
+  // height of the display window
+  const [windowHeight, setWindowHeight] = useState(120);
+
   const columns = [
     {
       title: 'message',
@@ -38,20 +45,22 @@ function MessagesTable({ messages, deleteData }) {
       key: 'delete',
       width: 80,
       render: (_, record) => (
-        <a onClick={() => deleteData(record.key)}>delete</a>
+        <a onClick={() => deleteMessage(record.key)}>delete</a>
       ),
     },
   ];
 
-  const [height, setHeight] = useState(120);
-
-  const resetHeight = () => setHeight(window.innerHeight);
-
+  // set the window height and listen to any window resize
   useEffect(() => {
-    resetHeight();
-    window.addEventListener('resize', resetHeight);
-    return () => window.removeEventListener('resize', resetHeight);
-  }, []);
+    setWindowHeight(window.innerHeight);
+    window.addEventListener('resize', () =>
+      setWindowHeight(window.innerHeight)
+    );
+    return () =>
+      window.removeEventListener('resize', () =>
+        setWindowHeight(window.innerHeight)
+      );
+  }, [setWindowHeight]);
 
   return (
     <div
@@ -70,7 +79,7 @@ function MessagesTable({ messages, deleteData }) {
         dataSource={messages}
         pagination={false}
         fixedHeader={true}
-        scroll={{ y: height * 0.5 }}
+        scroll={{ y: windowHeight * 0.5 }}
         bordered
       />
     </div>

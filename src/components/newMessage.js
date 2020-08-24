@@ -18,10 +18,13 @@ const layout = {
   },
 };
 
+/*
+  This component is a modal that allows the user to enter their message
+*/
 function NewMessage({ setNewMessage, addMessage }) {
   // content of the message
   const [content, setContent] = useState('');
-  // Boolean : whether the message is private or no
+  // Boolean: whether the message is private or no
   const [isPrivate, setIsPrivate] = useState(true);
 
   return (
@@ -31,16 +34,11 @@ function NewMessage({ setNewMessage, addMessage }) {
       onOk={(_) => addMessage({ content, isPrivate })}
       onCancel={(_) => setNewMessage(false)}
     >
-      <Form
-        {...layout}
-        initialValues={{
-          remember: true,
-        }}
-      >
+      <Form {...layout}>
         <Item label='Message' rows={4} rules={[{ required: true }]}>
           <TextArea onChange={(e) => setContent(e.target.value)} />
         </Item>
-        <Item label='Private' name='private'>
+        <Item label='Private'>
           <Checkbox
             onChange={() => setIsPrivate(!isPrivate)}
             checked={isPrivate}

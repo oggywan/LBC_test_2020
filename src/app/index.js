@@ -3,8 +3,10 @@ import firebase from 'firebase';
 import config from '../config';
 import MessagesTable from '../components/messagesTable';
 
-import { Button } from 'antd';
+import { Button, Switch } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import NewMessage from '../components/newMessage';
+import 'antd/es/switch/style/css.js';
 
 function App() {
   // array of messages, copied from the DB
@@ -13,6 +15,10 @@ function App() {
   const [newMessage, setNewMessage] = useState(false);
   // reference to the Firebase DB
   const [database, setDatabase] = useState(null);
+  // Boolean: show all messages, including private ones
+  const [showAll, setShowAll] = useState(false);
+  // Boolean: whether the Firebase DB is currently loading
+  const [dbLoading, setDbLoading] = useState(true);
 
   // first connect to the Firebase DB
   try {
@@ -31,6 +37,7 @@ function App() {
     rootRef.on('value', (snap) => {
       console.log('hello');
       const dbMessages = snap.val() || {};
+      setDbLoading(false);
       setMessages(
         Object.keys(dbMessages).map((key) => ({
           ...dbMessages[key],
@@ -57,7 +64,7 @@ function App() {
   };
 
   // removes the message from the DB
-  const deleteData = (key) => database.ref('messages/' + key).remove();
+  const deleteMessage = (key) => database.ref('messages/' + key).remove();
 
   return (
     <div>
@@ -93,8 +100,34 @@ function App() {
         </Button>
       </div>
 
-      <MessagesTable messages={messages} deleteData={deleteData} />
-
+      {dbLoading ? (
+        <LoadingOutlined
+          style={{
+            position: 'absolute',
+            left: 'calc(50% - 20px)',
+            top: '35%',
+            fontSize: '40px',
+          }}
+        />
+      ) : (
+        <>
+          <Switch
+            style={{
+              position: 'absolute',
+              right: '5%',
+              top: '25%',
+            }}
+            checked={showAll}
+            checkedChildren='hide private'
+            unCheckedChildren='show private'
+            onChange={() => setShowAll(!showAll)}
+          />
+          <MessagesTable
+            messages={messages.filter((msg) => !msg.private || showAll)}
+            deleteMessage={deleteMessage}
+          />
+        </>
+      )}
       {newMessage && (
         <NewMessage setNewMessage={setNewMessage} addMessage={addMessage} />
       )}
