@@ -4,7 +4,9 @@ import NewMessage from '../components/createMessageModal';
 import DeleteMessageModal from '../components/deleteMessageModal';
 import config from '../config';
 import firebase from 'firebase';
-import { Button, Switch } from 'antd';
+import Button from 'antd/lib/button';
+import Switch from 'antd/lib/switch';
+
 import { LoadingOutlined } from '@ant-design/icons';
 import 'antd/es/switch/style/css.js';
 

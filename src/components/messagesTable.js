@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table } from 'antd';
+import Table from 'antd/lib/table';
 import { DeleteOutlined } from '@ant-design/icons';
 import 'antd/es/table/style/css.js';
 
