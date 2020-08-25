@@ -9,12 +9,15 @@ import Switch from 'antd/lib/switch';
 
 import { LoadingOutlined } from '@ant-design/icons';
 import 'antd/es/switch/style/css.js';
+import ReadMessageModal from '../components/readMessageModal';
 
 function App() {
   // array of messages, copied from the DB
   const [messages, setMessages] = useState([]);
   // Boolean that toggles the new message modal display
   const [creatingMessage, setIsCreatingMessage] = useState(false);
+  // key of the message to be read, if any. Used to display the rading modal
+  const [messageKeyToRead, setMessageKeyToRead] = useState(null);
   // key of the message to be deleted, if any. Used to display the deletion modal
   const [messageKeyToDelete, setMessageKeyToDelete] = useState(null);
   // reference to the Firebase DB
@@ -133,6 +136,7 @@ function App() {
             messages={messages
               .filter((msg) => !msg.private || showAll)
               .reverse()}
+            setMessageKeyToRead={setMessageKeyToRead}
             setMessageKeyToDelete={setMessageKeyToDelete}
           />
         </>
@@ -150,6 +154,12 @@ function App() {
         <NewMessage
           addMessageToDB={addMessageToDB}
           setIsCreatingMessage={setIsCreatingMessage}
+        />
+      )}
+      {messageKeyToRead && (
+        <ReadMessageModal
+          setMessageKeyToRead={setMessageKeyToRead}
+          message={messages.find((msg) => msg.key === messageKeyToRead)}
         />
       )}
     </div>

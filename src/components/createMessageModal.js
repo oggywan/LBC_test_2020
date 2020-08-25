@@ -6,7 +6,6 @@ import Input from 'antd/lib/input';
 import Checkbox from 'antd/lib/checkbox';
 
 import 'antd/es/form/style/css.js';
-import 'antd/es/input/style/css.js';
 import 'antd/es/checkbox/style/css.js';
 import 'antd/es/modal/style/css.js';
 

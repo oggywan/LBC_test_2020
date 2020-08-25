@@ -4,8 +4,16 @@ import Table from 'antd/lib/table';
 import { DeleteOutlined } from '@ant-design/icons';
 import 'antd/es/table/style/css.js';
 
-const tableText = (v) => (
-  <p style={{ whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: 0 }}>
+const tableText = (v, onClick) => (
+  <p
+    style={{
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      marginBottom: 0,
+      cursor: onClick ? 'pointer' : 'default',
+    }}
+    onClick={onClick}
+  >
     {v}
   </p>
 );
@@ -14,7 +22,11 @@ const tableText = (v) => (
   This component is a Table that displays all messages 
   and allows to delete them (content | private | date | delete)
 */
-function MessagesTable({ messages, setMessageKeyToDelete }) {
+function MessagesTable({
+  messages,
+  setMessageKeyToRead,
+  setMessageKeyToDelete,
+}) {
   // height of the display window
   const [windowHeight, setWindowHeight] = useState(120);
 
@@ -23,31 +35,32 @@ function MessagesTable({ messages, setMessageKeyToDelete }) {
       title: 'message',
       dataIndex: 'content',
       key: 'content',
-      render: (v) => tableText(v),
+      render: (content, message) =>
+        tableText(content, () => setMessageKeyToRead(message.key)),
     },
     {
       title: 'private',
       dataIndex: 'private',
       key: 'private',
       width: 80,
-      render: (v) => (v ? tableText('yes') : tableText('no')),
+      render: (isPrivate) => (isPrivate ? tableText('yes') : tableText('no')),
     },
     {
       title: 'date',
       dataIndex: 'timestamp',
       key: 'timestamp',
       width: 170,
-      render: (v) => tableText(new Date(v).toLocaleString()),
+      render: (date) => tableText(new Date(date).toLocaleString()),
     },
     {
       title: 'delete',
       dataIndex: 'delete',
       key: 'delete',
       width: 80,
-      render: (_, record) => (
+      render: (_, message) => (
         <DeleteOutlined
           style={{ color: '#eb2f96', paddingLeft: '17px' }}
-          onClick={() => setMessageKeyToDelete(record.key)}
+          onClick={() => setMessageKeyToDelete(message.key)}
         />
       ),
     },
@@ -73,7 +86,7 @@ function MessagesTable({ messages, setMessageKeyToDelete }) {
         width: '90%',
         left: '5%',
         top: '35%',
-        fontFamily: 'Playfair Display',
+        fontFamily: 'Roboto',
         backgroundColor: 'yellow',
         fontWeight: 'bold',
       }}
