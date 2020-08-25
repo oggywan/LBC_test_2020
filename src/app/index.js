@@ -59,7 +59,7 @@ function App() {
     console.log('addMessageToDB: ', content);
     if (content) {
       const data = {
-        private: isPrivate,
+        isPrivate,
         content,
         timestamp: new Date().getTime(),
       };
@@ -134,7 +134,7 @@ function App() {
           />
           <MessagesTable
             messages={messages
-              .filter((msg) => !msg.private || showAll)
+              .filter((msg) => !msg.isPrivate || showAll)
               .reverse()}
             setMessageKeyToRead={setMessageKeyToRead}
             setMessageKeyToDelete={setMessageKeyToDelete}

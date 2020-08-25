@@ -20,7 +20,7 @@ const tableText = (v, onClick) => (
 
 /*
   This component is a Table that displays all messages 
-  and allows to delete them (content | private | date | delete)
+  and allows to delete them (content | isPrivate | date | delete)
 */
 function MessagesTable({
   messages,
@@ -40,8 +40,8 @@ function MessagesTable({
     },
     {
       title: 'private',
-      dataIndex: 'private',
-      key: 'private',
+      dataIndex: 'isPrivate',
+      key: 'isPrivate',
       width: 80,
       render: (isPrivate) => (isPrivate ? tableText('yes') : tableText('no')),
     },

@@ -10,12 +10,12 @@ import 'antd/es/button/style/css.js';
   This component is a modal that allows the user to read their message
 */
 function ReadMessageModal({ setMessageKeyToRead, message }) {
-  const { timestamp, content } = message;
+  const { timestamp, content, isPrivate } = message;
   return (
     <Modal
       title={
         new Date(timestamp).toLocaleString() +
-        (message.private ? ' - private message' : '')
+        (isPrivate ? ' - private message' : '')
       }
       // hide the read modal
       onCancel={(_) => setMessageKeyToRead(null)}
