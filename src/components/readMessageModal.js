@@ -10,7 +10,7 @@ function ReadMessageModal({ setMessageKeyToRead, message, isMobile }) {
   const { timestamp, content, isPrivate } = message;
   return (
     <Modal
-      style={{ transform: isMobile ? 'scale(2)' : 'unset' }}
+      style={{ transform: isMobile ? 'scale(2)' : 'unset', width: '45%' }}
       title={
         new Date(timestamp).toLocaleString() +
         (isPrivate ? ' - private message' : '')
@@ -22,9 +22,7 @@ function ReadMessageModal({ setMessageKeyToRead, message, isMobile }) {
         {
           text: 'Ok',
           // hide the read modal
-          onPress: () => {
-            setMessageKeyToRead(null);
-          },
+          onPress: () => setMessageKeyToRead(null),
         },
       ]}
     >

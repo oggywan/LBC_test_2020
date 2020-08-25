@@ -1,8 +1,25 @@
-# Content
+# LBC_test_2020
 
-- **React** | [Blog](https://www.codementor.io/@rajjeet/step-by-step-create-a-react-project-from-scratch-11s9skvnxv) | [GitHub](https://github.com/rajjeet/react-quick-start/tree/master) 
-    - React-Redux | [Blog](https://www.codementor.io/@rajjeet/step-by-step-how-to-add-redux-to-a-react-app-11tcgslmvi) | [GitHub](https://github.com/rajjeet/react-quick-start/tree/react-redux)
-        - Redux-Thunk | [Blog](https://www.codementor.io/@rajjeet/add-thunk-to-your-react-redux-project-for-async-actions-using-these-4-lines-of-code-11w6kntp46) | [GitHub](https://github.com/rajjeet/react-quick-start/tree/redux-thunk)
-        - Redux-Saga | [Blog](https://www.codementor.io/@rajjeet/add-thunk-to-your-react-redux-project-for-async-actions-using-these-4-lines-of-code-11w6kntp46) | [GitHub](https://github.com/rajjeet/react-quick-start/tree/redux-saga)
+LBC_test_2020 is an application that allows its users to enter, read, and delete their messages.
 
+Data is stored remotely, using a Firebase database.
 
+## Demo
+
+you can view the application running live [here](http://www.oghel.com/LBC)
+
+## Installation
+
+install the dependencies
+
+```bash
+yarn
+```
+
+## Usage
+
+launch the project
+
+```bash
+yarn start
+```

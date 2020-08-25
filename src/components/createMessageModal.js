@@ -22,7 +22,7 @@ const layout = {
 };
 
 /*
-  This component is a modal that allows the user to enter their new message
+  This component is a modal that allows the user to enter a new message
 */
 function CreateMessageModal({
   setIsCreatingMessage,
@@ -36,7 +36,7 @@ function CreateMessageModal({
 
   return (
     <Modal
-      style={{ transform: isMobile ? 'scale(2)' : 'unset' }}
+      style={{ transform: isMobile ? 'scale(2)' : 'unset', width: '45%' }}
       title='Write a new message'
       visible={true}
       transparent={true}
@@ -54,8 +54,12 @@ function CreateMessageModal({
       ]}
     >
       <Form {...layout}>
-        <Item label='Message' rows={4} rules={[{ required: true }]}>
-          <TextArea onChange={(e) => setContent(e.target.value)} />
+        <Item label='Message'>
+          <TextArea
+            rows={'6'}
+            placeholder={'you can type here'}
+            onChange={(e) => setContent(e.target.value)}
+          />
         </Item>
         <Item label='Private'>
           <Checkbox

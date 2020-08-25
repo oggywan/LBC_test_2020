@@ -17,7 +17,7 @@ function App() {
   // array of messages, copied from the DB
   const [messages, setMessages] = useState([]);
   // Boolean that toggles the new message modal display
-  const [creatingMessage, setIsCreatingMessage] = useState(false);
+  const [isCreatingMessage, setIsCreatingMessage] = useState(false);
   // key of the message to be read, if any. Used to display the rading modal
   const [messageKeyToRead, setMessageKeyToRead] = useState(null);
   // key of the message to be deleted, if any. Used to display the deletion modal
@@ -37,7 +37,6 @@ function App() {
   try {
     firebase.initializeApp(config);
     setDatabase(firebase.database());
-    console.log('database: ', database);
   } catch (err) {
     if (!/already exists/.test(err.message)) {
       console.error('firebase initialization error', err.stack);
@@ -48,7 +47,6 @@ function App() {
   useEffect(() => {
     const rootRef = firebase.database().ref().child('messages');
     rootRef.on('value', (snap) => {
-      console.log('hello');
       const dbMessages = snap.val() || {};
       setDbLoading(false);
       setMessages(
@@ -60,7 +58,7 @@ function App() {
     });
   }, []);
 
-  // set the window height, detect if user is on mobile, and listen to any window resize
+  // set the window height, detect if the user is on mobile, and listen to any window resize
   useEffect(() => {
     setWindowHeight(window.innerHeight);
     setIsMobile(screen.width < MOBILE_MAX_WIDTH);
@@ -75,7 +73,6 @@ function App() {
 
   // add a message to the Firebase DB
   const addMessageToDB = ({ content, isPrivate }) => {
-    console.log('addMessageToDB: ', content);
     if (content) {
       const data = {
         isPrivate,
@@ -89,12 +86,12 @@ function App() {
     }
   };
 
-  // removes the message whose id is messageKeyToDelete, from the DB
+  // removes, from the DB, the message whose id is messageKeyToDelete
   const deleteMessage = () => {
     database.ref('messages/' + messageKeyToDelete).remove();
     setMessageKeyToDelete('');
   };
-  console.log('messages: ', messages);
+
   return (
     <div>
       <p
@@ -180,7 +177,7 @@ function App() {
           isMobile={isMobile}
         />
       )}
-      {creatingMessage && (
+      {isCreatingMessage && (
         <CreateMessageModal
           addMessageToDB={addMessageToDB}
           setIsCreatingMessage={setIsCreatingMessage}

@@ -5,8 +5,9 @@ import { DeleteOutlined } from '@ant-design/icons';
 import 'antd/es/table/style/css.js';
 
 /*
-This component is a Table that displays all messages 
-and allows to delete them (content | isPrivate | date | delete)
+  This component is a Table that displays all the messages 
+  and allows to delete them 
+  display: (content | isPrivate | date | delete)
 */
 function MessagesTable({
   messages,

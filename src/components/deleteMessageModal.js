@@ -13,7 +13,7 @@ const DeleteMessageModal = ({
   isMobile,
 }) => (
   <Modal
-    style={{ transform: isMobile ? 'scale(2)' : 'unset' }}
+    style={{ transform: isMobile ? 'scale(2)' : 'unset', width: '45%' }}
     title='Warning'
     visible={true}
     transparent={true}
@@ -31,7 +31,9 @@ const DeleteMessageModal = ({
     ]}
   >
     <p>You are about to delete the below message:</p>
+    <p style={{ borderBottom: '1px solid black' }}>{'    '}</p>
     <p style={{ fontStyle: 'italic' }}>{content}</p>
+    <p style={{ borderBottom: '1px solid black' }}>{'    '}</p>
     <p>Are you sure?</p>
   </Modal>
 );
