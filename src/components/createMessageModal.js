@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-import Modal from 'antd/lib/modal';
+import Modal from 'antd-mobile/lib/modal';
 import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
 import Checkbox from 'antd/lib/checkbox';
 
 import 'antd/es/form/style/css.js';
 import 'antd/es/checkbox/style/css.js';
-import 'antd/es/modal/style/css.js';
+import 'antd-mobile/es/modal/style/css.js';
 
 const { TextArea } = Input;
 const { Item } = Form;
@@ -24,7 +24,11 @@ const layout = {
 /*
   This component is a modal that allows the user to enter their new message
 */
-function CreateMessageModal({ setIsCreatingMessage, addMessageToDB }) {
+function CreateMessageModal({
+  setIsCreatingMessage,
+  addMessageToDB,
+  isMobile,
+}) {
   // content of the message
   const [content, setContent] = useState('');
   // Boolean: whether the message is private or no
@@ -32,10 +36,22 @@ function CreateMessageModal({ setIsCreatingMessage, addMessageToDB }) {
 
   return (
     <Modal
+      style={{ transform: isMobile ? 'scale(2)' : 'unset' }}
       title='Write a new message'
       visible={true}
-      onOk={(_) => addMessageToDB({ content, isPrivate })}
-      onCancel={(_) => setIsCreatingMessage(false)}
+      transparent={true}
+      maskClosable={false}
+      footer={[
+        {
+          text: 'Cancel',
+          // hide the read modal
+          onPress: () => setIsCreatingMessage(false),
+        },
+        {
+          text: 'Ok',
+          onPress: () => addMessageToDB({ content, isPrivate }),
+        },
+      ]}
     >
       <Form {...layout}>
         <Item label='Message' rows={4} rules={[{ required: true }]}>

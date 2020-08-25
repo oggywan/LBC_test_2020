@@ -1,82 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import Table from 'antd/lib/table';
 import { DeleteOutlined } from '@ant-design/icons';
 import 'antd/es/table/style/css.js';
 
-const tableText = (v, onClick) => (
-  <p
-    style={{
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      marginBottom: 0,
-      cursor: onClick ? 'pointer' : 'default',
-    }}
-    onClick={onClick}
-  >
-    {v}
-  </p>
-);
-
 /*
-  This component is a Table that displays all messages 
-  and allows to delete them (content | isPrivate | date | delete)
+This component is a Table that displays all messages 
+and allows to delete them (content | isPrivate | date | delete)
 */
 function MessagesTable({
   messages,
   setMessageKeyToRead,
   setMessageKeyToDelete,
+  windowHeight,
+  isMobile,
 }) {
-  // height of the display window
-  const [windowHeight, setWindowHeight] = useState(120);
+  const tableText = (text, onClick) => (
+    <p
+      style={{
+        overflow: 'hidden',
+        marginBottom: 0,
+        cursor: onClick ? 'pointer' : 'default',
+        fontSize: isMobile ? '2em' : '1em',
+        lineHeight: isMobile ? '2em' : '.9em',
+        height: isMobile ? '4em' : '1em',
+        fontWeight: '300',
+      }}
+      onClick={onClick}
+    >
+      {text}
+    </p>
+  );
+
+  const tableTitle = (text) => (
+    <p
+      style={{
+        fontSize: isMobile ? '2em' : '1em',
+        marginBottom: 0,
+        fontWeight: '400',
+      }}
+    >
+      {text}
+    </p>
+  );
 
   const columns = [
     {
-      title: 'message',
+      title: () => tableTitle('message'),
       dataIndex: 'content',
       key: 'content',
       render: (content, message) =>
         tableText(content, () => setMessageKeyToRead(message.key)),
     },
     {
-      title: 'private',
+      title: () => tableTitle('private'),
       dataIndex: 'isPrivate',
       key: 'isPrivate',
-      width: 80,
+      width: isMobile ? 120 : 80,
       render: (isPrivate) => (isPrivate ? tableText('yes') : tableText('no')),
     },
     {
-      title: 'date',
+      title: () => tableTitle('date'),
       dataIndex: 'timestamp',
       key: 'timestamp',
       width: 170,
       render: (date) => tableText(new Date(date).toLocaleString()),
     },
     {
-      title: 'delete',
+      title: () => tableTitle('delete'),
       dataIndex: 'delete',
       key: 'delete',
-      width: 80,
+      width: isMobile ? 110 : 80,
       render: (_, message) => (
         <DeleteOutlined
-          style={{ color: '#ff6e14', paddingLeft: '17px' }}
+          style={{
+            color: '#ff6e14',
+            paddingLeft: '17px',
+            fontSize: isMobile ? '2em' : 'unset',
+          }}
           onClick={() => setMessageKeyToDelete(message.key)}
         />
       ),
     },
   ];
-
-  // set the window height and listen to any window resize
-  useEffect(() => {
-    setWindowHeight(window.innerHeight);
-    window.addEventListener('resize', () =>
-      setWindowHeight(window.innerHeight)
-    );
-    return () =>
-      window.removeEventListener('resize', () =>
-        setWindowHeight(window.innerHeight)
-      );
-  }, [setWindowHeight]);
 
   return (
     <div

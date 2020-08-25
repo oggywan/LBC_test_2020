@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "antd": "^4.6.1",
+    "antd-mobile": "^2.3.3",
     "craco-less": "^1.17.0",
     "css-loader": "^4.2.1",
     "firebase": "^7.19.0",

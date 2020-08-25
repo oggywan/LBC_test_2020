@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import MessagesTable from '../components/messagesTable';
-import NewMessage from '../components/createMessageModal';
+import CreateMessageModal from '../components/createMessageModal';
 import DeleteMessageModal from '../components/deleteMessageModal';
 import config from '../config';
 import firebase from 'firebase';
 import Button from 'antd/lib/button';
 import Switch from 'antd/lib/switch';
 import { LoadingOutlined } from '@ant-design/icons';
-import 'antd/es/switch/style/css.js';
+import 'antd-mobile/es/switch/style/css.js';
 import ReadMessageModal from '../components/readMessageModal';
 import './App.less';
+
+const MOBILE_MAX_WIDTH = 600;
 
 function App() {
   // array of messages, copied from the DB
@@ -26,6 +28,10 @@ function App() {
   const [showAll, setShowAll] = useState(false);
   // Boolean: whether the Firebase DB is currently loading
   const [dbLoading, setDbLoading] = useState(true);
+  // Boolean: whether the user is on a mobile device
+  const [isMobile, setIsMobile] = useState(false);
+  // height of the display window
+  const [windowHeight, setWindowHeight] = useState(120);
 
   // first connect to the Firebase DB
   try {
@@ -53,6 +59,19 @@ function App() {
       );
     });
   }, []);
+
+  // set the window height, detect if user is on mobile, and listen to any window resize
+  useEffect(() => {
+    setWindowHeight(window.innerHeight);
+    setIsMobile(screen.width < MOBILE_MAX_WIDTH);
+    window.addEventListener('resize', () =>
+      setWindowHeight(window.innerHeight)
+    );
+    return () =>
+      window.removeEventListener('resize', () =>
+        setWindowHeight(window.innerHeight)
+      );
+  }, [setWindowHeight, setIsMobile]);
 
   // add a message to the Firebase DB
   const addMessageToDB = ({ content, isPrivate }) => {
@@ -84,8 +103,8 @@ function App() {
           width: '100%',
           height: '10%',
           textAlign: 'center',
-          lineHeight: '3em',
-          fontSize: '3em',
+          lineHeight: isMobile ? '4em' : '3em',
+          fontSize: isMobile ? '6em' : '3em',
           fontFamily: 'Playfair Display',
         }}
         onClick={addMessageToDB}
@@ -95,14 +114,17 @@ function App() {
       <div
         style={{
           position: 'absolute',
-          width: '20%',
-          left: '40%',
+          width: isMobile ? '50%' : '20%',
+          left: isMobile ? '25%' : '40%',
           top: '20%',
         }}
       >
         <Button
           type='primary'
-          style={{}}
+          style={{
+            fontSize: isMobile ? '3em' : '1em',
+            height: '10%',
+          }}
           block
           onClick={() => setIsCreatingMessage(true)}
         >
@@ -121,23 +143,30 @@ function App() {
         />
       ) : (
         <>
-          <Switch
+          <div
             style={{
               position: 'absolute',
               right: '5%',
               top: '30%',
+              transform: isMobile ? 'scale(2)' : 'unset',
+              transformOrigin: '100% 50%',
             }}
-            checked={showAll}
-            checkedChildren='hide private'
-            unCheckedChildren='show private'
-            onChange={() => setShowAll(!showAll)}
-          />
+          >
+            <Switch
+              checked={showAll}
+              checkedChildren='hide private'
+              unCheckedChildren='show private'
+              onChange={() => setShowAll(!showAll)}
+            />
+          </div>
           <MessagesTable
             messages={messages
               .filter((msg) => !msg.isPrivate || showAll)
               .reverse()}
             setMessageKeyToRead={setMessageKeyToRead}
             setMessageKeyToDelete={setMessageKeyToDelete}
+            windowHeight={windowHeight}
+            isMobile={isMobile}
           />
         </>
       )}
@@ -148,18 +177,21 @@ function App() {
           content={
             messages.find((msg) => msg.key === messageKeyToDelete).content
           }
+          isMobile={isMobile}
         />
       )}
       {creatingMessage && (
-        <NewMessage
+        <CreateMessageModal
           addMessageToDB={addMessageToDB}
           setIsCreatingMessage={setIsCreatingMessage}
+          isMobile={isMobile}
         />
       )}
       {messageKeyToRead && (
         <ReadMessageModal
           setMessageKeyToRead={setMessageKeyToRead}
           message={messages.find((msg) => msg.key === messageKeyToRead)}
+          isMobile={isMobile}
         />
       )}
     </div>

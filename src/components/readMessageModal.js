@@ -1,26 +1,32 @@
 import React from 'react';
 
-import Modal from 'antd/lib/modal';
-import Button from 'antd/lib/modal';
-
-import 'antd/es/modal/style/css.js';
-import 'antd/es/button/style/css.js';
+import Modal from 'antd-mobile/lib/modal';
+import 'antd-mobile/es/modal/style/css.js';
 
 /*
   This component is a modal that allows the user to read their message
 */
-function ReadMessageModal({ setMessageKeyToRead, message }) {
+function ReadMessageModal({ setMessageKeyToRead, message, isMobile }) {
   const { timestamp, content, isPrivate } = message;
   return (
     <Modal
+      style={{ transform: isMobile ? 'scale(2)' : 'unset' }}
       title={
         new Date(timestamp).toLocaleString() +
         (isPrivate ? ' - private message' : '')
       }
-      // hide the read modal
-      onCancel={(_) => setMessageKeyToRead(null)}
       visible={true}
-      footer={null}
+      transparent={true}
+      maskClosable={false}
+      footer={[
+        {
+          text: 'Ok',
+          // hide the read modal
+          onPress: () => {
+            setMessageKeyToRead(null);
+          },
+        },
+      ]}
     >
       <p style={{ fontStyle: 'italic' }}>{content}</p>
     </Modal>
