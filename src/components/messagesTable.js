@@ -59,7 +59,7 @@ function MessagesTable({
       width: 80,
       render: (_, message) => (
         <DeleteOutlined
-          style={{ color: '#eb2f96', paddingLeft: '17px' }}
+          style={{ color: '#ff6e14', paddingLeft: '17px' }}
           onClick={() => setMessageKeyToDelete(message.key)}
         />
       ),

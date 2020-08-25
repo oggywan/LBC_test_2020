@@ -6,10 +6,10 @@ import config from '../config';
 import firebase from 'firebase';
 import Button from 'antd/lib/button';
 import Switch from 'antd/lib/switch';
-
 import { LoadingOutlined } from '@ant-design/icons';
 import 'antd/es/switch/style/css.js';
 import ReadMessageModal from '../components/readMessageModal';
+import './App.less';
 
 function App() {
   // array of messages, copied from the DB
