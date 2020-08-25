@@ -64,7 +64,7 @@ function MessagesTable({
       title: () => tableTitle('date'),
       dataIndex: 'timestamp',
       key: 'timestamp',
-      width: 170,
+      width: 180,
       render: (date) => tableText(new Date(date).toLocaleString()),
     },
     {
